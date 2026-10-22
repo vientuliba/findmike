@@ -1,6 +1,7 @@
 use std::fs;
 use std::io;
 use std::num;
+use std::env;
 
 fn read_binary(path: &str) -> Result<Vec<u8>, io::Error> {
     let bytes = fs::read(path);
@@ -18,20 +19,29 @@ fn parse_pattern(pattern: &str) -> Result<Vec<u8>, num::ParseIntError> {
 }
 
 fn find_pattern(data: &[u8], pattern: &[u8]) -> Vec<usize> {
-    todo!();
+    let mut matches: Vec<usize> = Vec::new();
+
+    for (i, window) in data.windows(pattern.len()).enumerate() {
+        if window == pattern {
+            matches.push(i)
+        }
+    }
+
+    return matches;
 }
 
 fn main(){
-    let bytes = read_binary("./my.bin").expect("Failed to read binary");
-    let pattern = parse_pattern("FF 41 67 3A").expect("Failed to parse pattern");
-
-    for b in &pattern {
-        print!("0x{:x} ", b);
+    if env::args().count() == 1 {
+        eprintln!("Usage: findmike 'path' 'pattern'")
     }
 
-    println!();
+    let path = env::args().nth(1).expect("No path provided");
+    let pattern = env::args().nth(2).expect("No pattern provided");
 
-    for b in &bytes {
-        print!("0x{:x} ", b);
-    }
+    let file_bytes: Vec<u8> = read_binary(&path).expect("Failed to read binary");
+    let pattern_bytes: Vec<u8> = parse_pattern(&pattern).expect("Failed to parse pattern");
+
+    let occurrences = find_pattern(&file_bytes, &pattern_bytes);
+
+    
 }
