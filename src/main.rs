@@ -35,7 +35,7 @@ fn print_finds(offsets: &[usize], pattern: &str) {
         println!("Found matches for pattern: {}", pattern);
 
         for offset in offsets {
-        println!("\t{}", offset);
+        println!("\t{:#x}", offset);
         }
     } else {
         println!("Found no matches for pattern: {}", pattern);
@@ -44,7 +44,8 @@ fn print_finds(offsets: &[usize], pattern: &str) {
 
 fn main(){
     if env::args().count() == 1 {
-        eprintln!("Usage: findmike 'path' 'pattern'")
+        eprintln!("Usage: findmike 'path' 'pattern'");
+        return;
     }
 
     let path = env::args().nth(1).expect("No path provided");
