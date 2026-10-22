@@ -30,6 +30,18 @@ fn find_pattern(data: &[u8], pattern: &[u8]) -> Vec<usize> {
     return matches;
 }
 
+fn print_finds(offsets: &[usize], pattern: &str) {
+    if !offsets.is_empty() {
+        println!("Found matches for pattern: {}", pattern);
+
+        for offset in offsets {
+        println!("\t{}", offset);
+        }
+    } else {
+        println!("Found no matches for pattern: {}", pattern);
+    }
+}
+
 fn main(){
     if env::args().count() == 1 {
         eprintln!("Usage: findmike 'path' 'pattern'")
@@ -41,7 +53,7 @@ fn main(){
     let file_bytes: Vec<u8> = read_binary(&path).expect("Failed to read binary");
     let pattern_bytes: Vec<u8> = parse_pattern(&pattern).expect("Failed to parse pattern");
 
-    let occurrences = find_pattern(&file_bytes, &pattern_bytes);
+    let offsets = find_pattern(&file_bytes, &pattern_bytes);
 
-    
+    print_finds(&offsets, &pattern);
 }
